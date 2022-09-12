@@ -11,7 +11,6 @@ export class Employee extends Component {
     super(props);
     this.state={
         emps:[],
-        managers:[],
         addModalShow:false,
         editModalShow:false
     }
@@ -35,7 +34,7 @@ export class Employee extends Component {
         )
     });
   }
-  
+
   deleteEmp(EmpID){
     if(window.confirm('Are you sure?')){
         fetch('http://localhost:54682/api/employee/' + EmpID,
@@ -60,7 +59,6 @@ export class Employee extends Component {
                     <th>Name</th>
                     <th>Department</th>
                     <th>Mail</th>
-                    <th>Manager</th>
                     <th>DOJ</th>
                     <th></th>
                 </tr>
@@ -73,7 +71,6 @@ export class Employee extends Component {
                             <td className='align-middle' >{emp.EmployeeName}</td>
                             <td className='align-middle' >{emp.Department}</td>
                             <td className='align-middle' >{emp.MailID}</td>
-                            <td className='align-middle' >{emp.ManagerID}</td>
                             <td className='align-middle' >{emp.DOJ}</td>
                             <td className='align-middle' >
                                 <ButtonToolbar className='d-flex justify-content-around'>
