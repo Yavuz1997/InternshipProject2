@@ -17,7 +17,7 @@ namespace WebAPI.Controllers
         {
             DataTable table = new DataTable();
 
-            string query = @"select EmployeeID,EmployeeName,Department,MailID,CONVERT(varchar(10),DOJ,120) as DOJ from dbo.Employees";
+            string query = @"select EmployeeID,EmployeeName,Department,MailID,ManagerID,CONVERT(varchar(10),DOJ,120) as DOJ from dbo.Employees";
 
             var con = new SqlConnection(ConfigurationManager.ConnectionStrings["EmployeeAppDB"].ConnectionString);
             var command = new SqlCommand(query, con);
@@ -39,10 +39,11 @@ namespace WebAPI.Controllers
 
                 string DOJ = emp.DOJ.ToString("yyyy-MM-dd HH:mm:ss.fff");
 
-                string query = @"insert into dbo.Employees (EmployeeName,Department,MailID,DOJ) values (
+                string query = @"insert into dbo.Employees (EmployeeName,Department,MailID,ManagerID,DOJ) values (
             '" + emp.EmployeeName + @"',
             '" + emp.Department + @"',
             '" + emp.MailID + @"',
+            '" + emp.ManagerID + @"',
             '" + DOJ + @"'
 
             )";
@@ -74,6 +75,7 @@ namespace WebAPI.Controllers
                     EmployeeName='" + emp.EmployeeName + @"',
                     Department='" + emp.Department + @"',
                     MailID='" + emp.MailID + @"',
+                    MailID='" + emp.ManagerID + @"',
                     DOJ='" + DOJ + @"'
                      where  EmployeeID=" + emp.EmployeeID + @"
                     ";
