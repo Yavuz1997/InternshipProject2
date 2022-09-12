@@ -40,7 +40,8 @@ namespace WebAPI.Controllers
             {
                 DataTable table = new DataTable();
 
-                string query = @"insert into dbo.Managers values ('" + man.ManagerName + @"')";
+                
+                string query = @"insert into dbo.Managers (ManagerName) values ('" + man.ManagerName + @"')";
 
                 var con = new SqlConnection(ConfigurationManager.ConnectionStrings["EmployeeAppDB"].ConnectionString);
                 var command = new SqlCommand(query, con);

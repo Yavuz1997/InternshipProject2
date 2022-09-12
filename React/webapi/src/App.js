@@ -1,10 +1,11 @@
 import './App.css';
-import {Home} from './Components/Home'
-import { Department } from './Components/Department/Department';
-import {Employee} from './Components/Employee/Employee'
-import {BrowserRouter,Route,Switch} from 'react-router-dom'
-import {Navigation} from './Components/Navigation'
-//add firms and managers
+import {Home} from './Components/Home';
+import {Department} from './Components/Department/Department';
+import {Employee} from './Components/Employee/Employee';
+import {Manager} from './Components/Manager/Manager';
+import {BrowserRouter,Route,Switch} from 'react-router-dom';
+import {Navigation} from './Components/Navigation';
+
 function App() {
   return (
     <BrowserRouter>
@@ -15,6 +16,8 @@ function App() {
         <Route path='/' component={Home} exact />
         <Route path='/Department' component={Department} exact/>
         <Route path='/Employee' component={Employee} exact/>
+        <Route path='/Manager' component={Manager} exact/>
+
         
       </Switch>
     </BrowserRouter>

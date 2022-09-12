@@ -10,8 +10,10 @@ export class Navigation extends Component {
         <Navbar.Collapse id="navbar-collapse">
           <Nav className="d-flex justfity-content-left">
             <Navbar.Brand href="/">Home</Navbar.Brand>
-            <Nav.Link href="/Department">Department</Nav.Link>
-            <Nav.Link href="/Employee">Employee</Nav.Link>
+            <Nav.Link href="/Department">Departments</Nav.Link>
+            <Nav.Link href="/Employee">Employees</Nav.Link>
+            <Nav.Link href="/Manager">Managers</Nav.Link>
+
           </Nav>
         </Navbar.Collapse>
     </Navbar>
