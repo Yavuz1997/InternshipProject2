@@ -11,9 +11,11 @@ export class Employee extends Component {
     super(props);
     this.state={
         emps:[],
+        mans:[],
         addModalShow:false,
         editModalShow:false
     }
+
 }
   componentDidMount() { 
     this.refreshlist();
@@ -33,6 +35,17 @@ export class Employee extends Component {
             }
         )
     });
+    fetch('http://localhost:54682/api/manager')
+    .then((response) => {
+    return response.json();
+    })
+    .then((data) => {
+        this.setState(
+            {
+                mans:data
+            }
+        )
+    });
   }
 
   deleteEmp(EmpID){
@@ -46,10 +59,18 @@ export class Employee extends Component {
             }
         });
     }
+  }
 
+  getManager(mans,ManagerID){
+    if (ManagerID === 0){
+        return "No Manager";
+    }
+   var manager = mans.find(man => man.ID === ManagerID);
+   if( manager !== undefined)
+    return manager.ManagerName;
   }
   render() {
-    const{emps,EmpID,EmpName,EmpDep,EmpMail,EmpDOJ} = this.state;
+    const{emps,mans,EmpID,EmpName,EmpDep,EmpMail,EmpDOJ} = this.state;
     return (
       <Container>
         <Table className='mt-4' striped bordered hover size='sm'>
@@ -59,6 +80,7 @@ export class Employee extends Component {
                     <th>Name</th>
                     <th>Department</th>
                     <th>Mail</th>
+                    <th>Manager</th>
                     <th>DOJ</th>
                     <th></th>
                 </tr>
@@ -71,6 +93,7 @@ export class Employee extends Component {
                             <td className='align-middle' >{emp.EmployeeName}</td>
                             <td className='align-middle' >{emp.Department}</td>
                             <td className='align-middle' >{emp.MailID}</td>
+                            <td className='align-middle' >{this.getManager(mans,emp.ManagerID)}</td>
                             <td className='align-middle' >{emp.DOJ}</td>
                             <td className='align-middle' >
                                 <ButtonToolbar className='d-flex justify-content-around'>
