@@ -1,7 +1,7 @@
 import './App.css';
 import {Home} from './Components/Home'
-import { Department } from './Components/Department';
-import {Employee} from './Components/Employee'
+import { Department } from './Components/Department/Department';
+import {Employee} from './Components/Employee/Employee'
 import {BrowserRouter,Route,Switch} from 'react-router-dom'
 import {Navigation} from './Components/Navigation'
 //add firms and managers
