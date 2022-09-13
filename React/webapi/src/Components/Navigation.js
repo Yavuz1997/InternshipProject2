@@ -19,11 +19,20 @@ export class Navigation extends Component {
               <NavDropdown.Item href="/Employee">Employees</NavDropdown.Item>
               <NavDropdown.Item href="/Manager">Managers</NavDropdown.Item>
             </NavDropdown>
+            <NavDropdown
+              id="nav-dropdown-dark-example"
+              title="Department Management"
+              menuVariant="dark"
+            >
+              <NavDropdown.Item href="/Department">Departments</NavDropdown.Item>
+              <NavDropdown.Item href="/Subdepartment">Subdepartments</NavDropdown.Item>
+            </NavDropdown>
 
             {/* 
             <Nav.Link href="/Manager">Managers</Nav.Link>
-            <Nav.Link href="/Employee">Employees</Nav.Link> */} 
-            <Nav.Link href="/Department">Departments</Nav.Link>
+            <Nav.Link href="/Employee">Employees</Nav.Link>
+            <Nav.Link href="/Department">Departments</Nav.Link> */} 
+            
 
           </Nav>
         </Navbar.Collapse>

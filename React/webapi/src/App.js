@@ -2,6 +2,7 @@ import './App.css';
 import {Home} from './Components/Home';
 import {Department} from './Components/Department/Department';
 import {Employee} from './Components/Employee/Employee';
+import {Subdepartment} from './Components/Subdepartment/Subdepartment';
 import {Manager} from './Components/Manager/Manager';
 import {BrowserRouter,Route,Switch} from 'react-router-dom';
 import {Navigation} from './Components/Navigation';
@@ -17,8 +18,7 @@ function App() {
         <Route path='/Department' component={Department} exact/>
         <Route path='/Employee' component={Employee} exact/>
         <Route path='/Manager' component={Manager} exact/>
-
-        
+        <Route path='/Subdepartment' component={Subdepartment} exact/>
       </Switch>
     </BrowserRouter>
   );
