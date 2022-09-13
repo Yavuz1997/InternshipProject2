@@ -94,7 +94,7 @@ export class Subdepartment extends Component {
                                                 editModalShow:true,
                                                 SubID:sub.ID,
                                                 SubName:sub.SubName,
-                                                DepID:sub.DepartmentID
+                                                DepID:sub.DepartmentID,
                                             })}} >
                                             Edit
                                             <ModeEditOutlineOutlinedIcon className='ms-2'/>
@@ -109,7 +109,8 @@ export class Subdepartment extends Component {
                                         subid={SubID}
                                         subname={SubName}
                                         depid={DepID}
-                                        add={false}   
+                                        add={0}
+                                        deps={deps}
                                         />
                                     </ButtonToolbar>
                                 </td>
@@ -125,7 +126,7 @@ export class Subdepartment extends Component {
                     Add Subdepartment
                 </Button>
             </ButtonToolbar>
-            <AddEditModal show={this.state.addModalShow} onHide={() => this.setState({addModalShow:false})} add={true} />
+            <AddEditModal show={this.state.addModalShow} onHide={() => this.setState({addModalShow:false})} add={1} deps={deps} />
         </Container>
     )
   }

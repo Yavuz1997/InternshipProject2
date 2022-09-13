@@ -7,12 +7,12 @@ export class AddEditModal extends Component {
         super(props);
         this.state=({
           snackbaropen:false,
-          snackbarmsg:'',
-          addEdit:0
+          snackbarmsg:''
         })
         this.handleSubmitAdd=this.handleSubmitAdd.bind(this);
         this.handleSubmitEdit=this.handleSubmitEdit.bind(this);
         this.getModal=this.getModal.bind(this);
+        //console.log(this.props.test);
       }
     
       snackbarClose = () => 
@@ -22,7 +22,7 @@ export class AddEditModal extends Component {
         });
       }
       getModal(){
-        if(this.props.add === true){
+        if(this.props.add === 1){
             return(
             <Modal
             {...this.props}
@@ -32,7 +32,7 @@ export class AddEditModal extends Component {
             >
               <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                  Add Manager
+                  Add Subdepartment
                 </Modal.Title>
               </Modal.Header>
               <Modal.Body>
@@ -41,9 +41,20 @@ export class AddEditModal extends Component {
                     <Form onSubmit={this.handleSubmitAdd} >
                       <Form.Group>
                         <Form.Label>
-                          Manager Name
+                          Subdepartment Name
                         </Form.Label>
-                        <FormControl type="text" name="ManagerName" required placeholder='Manager Name' />
+                        <FormControl type="text" name="SubdepartmentName" required placeholder='Subdepartment Name' />
+                      </Form.Group>
+                      <Form.Group className='mb-2'>
+                        <Form.Label>
+                          Department
+                        </Form.Label>
+                        <FormControl as="select" className='form-select' name="Department">
+                        <option key={0} value={0} >No Department</option>
+                          {this.props.deps.map(dep => 
+                            <option key={dep.DepartmentID} value={dep.DepartmentID} >{dep.DepartmentName}</option>  
+                          )}
+                        </FormControl>
                       </Form.Group>
                       <Form.Group>
                         <Button variant="primary" type="submit" className='mt-3' >
@@ -69,43 +80,54 @@ export class AddEditModal extends Component {
                 >
                 <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">
-                    Update Manager
+                    Update Subdepartment
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Row>
                     <Col sm="6">
                         <Form onSubmit={this.handleSubmitEdit} >
-                        <Form.Group>
+                          <Form.Group>
+                              <Form.Label>
+                              Subdepartment ID
+                              </Form.Label>
+                              <FormControl 
+                              type="text" 
+                              name="ID" 
+                              required 
+                              disabled
+                              defaultValue={this.props.subid}
+                              placeholder='Subdepartment ID' 
+                              />
+                          </Form.Group>
+                          <Form.Group>
+                              <Form.Label>
+                              Subdepartment Name
+                              </Form.Label>
+                              <Form.Control 
+                              type="text" 
+                              name="SubdepartmentName" 
+                              required 
+                              defaultValue={this.props.subname}
+                              placeholder='Subdepartment Name' 
+                              />
+                          </Form.Group>
+                          <Form.Group className='mb-2'>
                             <Form.Label>
-                            Manager ID
+                              Department
                             </Form.Label>
-                            <FormControl 
-                            type="text" 
-                            name="ID" 
-                            required 
-                            disabled
-                            defaultValue={this.props.ManID}
-                            placeholder='Manager ID' 
-                            />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>
-                            Manager Name
-                            </Form.Label>
-                            <Form.Control 
-                            type="text" 
-                            name="ManagerName" 
-                            required 
-                            defaultValue={this.props.ManName}
-                            placeholder='Manager Name' 
-                            />
-                        </Form.Group>
-                        <Form.Group>
-                            <Button variant="primary" type="submit" className='mt-3' >
-                            Update
-                            </Button>
-                        </Form.Group>
+                            <FormControl as="select" className='form-select' name="Department" defaultValue={this.props.depid} >
+                            <option key={0} value={0}  >No Department</option>
+                              {this.props.deps.map(dep => 
+                                <option key={dep.DepartmentID} value={dep.DepartmentID} >{dep.DepartmentName}</option>  
+                              )}
+                            </FormControl>
+                          </Form.Group>
+                          <Form.Group>
+                              <Button variant="primary" type="submit" className='mt-3' >
+                              Update
+                              </Button>
+                          </Form.Group>
                         </Form>
                     </Col>
                     </Row>
@@ -120,16 +142,16 @@ export class AddEditModal extends Component {
     
       handleSubmitAdd(e){
         e.preventDefault();
-        fetch('http://localhost:54682/api/manager', {
+        fetch('http://localhost:54682/api/Subdepartment', {
           method:'POST',
           headers:{
             'Accept':'application/json',
             'Content-Type':'application/json'
           },
           body:JSON.stringify({
-            ManagerID:null,
-            ManagerName:e.target.ManagerName.value,
-            EmployeeCount:null
+            ID:null,
+            DepartmentID:e.target.Department.value,
+            SubName:e.target.SubdepartmentName.value
           })
         })
         .then(res => res.json())
@@ -152,7 +174,7 @@ export class AddEditModal extends Component {
 
       handleSubmitEdit(e){
         e.preventDefault();
-        fetch('http://localhost:54682/api/manager', {
+        fetch('http://localhost:54682/api/Subdepartment', {
           method:'PUT',
           headers:{
             'Accept':'application/json',
@@ -160,7 +182,8 @@ export class AddEditModal extends Component {
           },
           body:JSON.stringify({
             ID:e.target.ID.value,
-            ManagerName:e.target.ManagerName.value
+            DepartmentID:e.target.Department.value,
+            SubName:e.target.SubdepartmentName.value
           })
         })
         .then(res => res.json())

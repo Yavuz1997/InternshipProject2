@@ -167,8 +167,6 @@ export class EditEmpModal extends Component {
                       )}
                     </FormControl>
                   </Form.Group>
-                  
-                  {console.log(this.props.empman)}
                   <Form.Group>
                     <Form.Label>
                       Join Date
