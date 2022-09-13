@@ -1,25 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data;
 using System.Data.SqlClient;
+using System.Data;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Security.Cryptography;
-using System.Web.Http;
+using System.Net;
+using System.Web;
+using System.Web.Mvc;
 using WebAPI.Models;
+using System.Web.Http;
 
 namespace WebAPI.Controllers
 {
-    public class ManagerController : ApiController
+    public class SubdepartmentController : ApiController
     {
-
         public HttpResponseMessage Get()
         {
             DataTable table = new DataTable();
 
-            string query = @"select ID,ManagerName,EmployeeCount from dbo.Managers";
+            string query = @"select ID,DepartmentID,SubName from dbo.Subdepartments";
 
             var con = new SqlConnection(ConfigurationManager.ConnectionStrings["EmployeeAppDB"].ConnectionString);
             var command = new SqlCommand(query, con);
@@ -33,15 +33,15 @@ namespace WebAPI.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, table);
 
         }
-
-        public string Post(Manager man)
+        public string Post(Subdepartment sub)
         {
             try
             {
                 DataTable table = new DataTable();
 
-                
-                string query = @"insert into dbo.Managers (ManagerName) values ('" + man.ManagerName + @"')";
+
+                string query = @"insert into dbo.Employees (DepartmentID,SubName) values (
+                '" + sub.DepartmentID + @"','" + sub.SubName + @"')";
 
                 var con = new SqlConnection(ConfigurationManager.ConnectionStrings["EmployeeAppDB"].ConnectionString);
                 var command = new SqlCommand(query, con);
@@ -60,14 +60,15 @@ namespace WebAPI.Controllers
             }
 
         }
-        public string Put(Manager man)
+        public string Put(Subdepartment sub)
         {
             try
             {
                 DataTable table = new DataTable();
-
-                string query = @"update dbo.Managers set ManagerName='" + man.ManagerName +
-                    @"' where  ID=" + man.ID + @"
+                string query = @"update dbo.Subdepartments set 
+                    DepartmentID='" + sub.DepartmentID + @"',
+                    SubName='" + sub.SubName + @"'
+                    where  ID=" + sub.ID + @"
                     ";
 
                 var con = new SqlConnection(ConfigurationManager.ConnectionStrings["EmployeeAppDB"].ConnectionString);
@@ -93,7 +94,7 @@ namespace WebAPI.Controllers
             {
                 DataTable table = new DataTable();
 
-                string query = @"delete from dbo.Managers where ID = " + id;
+                string query = @"delete from dbo.Subdepartments where ID = " + id;
 
                 var con = new SqlConnection(ConfigurationManager.ConnectionStrings["EmployeeAppDB"].ConnectionString);
                 var command = new SqlCommand(query, con);
