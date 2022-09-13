@@ -40,7 +40,7 @@ namespace WebAPI.Controllers
                 DataTable table = new DataTable();
 
 
-                string query = @"insert into dbo.Employees (DepartmentID,SubName) values (
+                string query = @"insert into dbo.Subdepartments (DepartmentID,SubName) values (
                 '" + sub.DepartmentID + @"','" + sub.SubName + @"')";
 
                 var con = new SqlConnection(ConfigurationManager.ConnectionStrings["EmployeeAppDB"].ConnectionString);
