@@ -75,7 +75,7 @@ namespace WebAPI.Controllers
                     EmployeeName='" + emp.EmployeeName + @"',
                     Department='" + emp.Department + @"',
                     MailID='" + emp.MailID + @"',
-                    MailID='" + emp.ManagerID + @"',
+                    ManagerID='" + emp.ManagerID + @"',
                     DOJ='" + DOJ + @"'
                      where  EmployeeID=" + emp.EmployeeID + @"
                     ";

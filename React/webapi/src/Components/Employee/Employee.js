@@ -70,7 +70,7 @@ export class Employee extends Component {
     return manager.ManagerName;
   }
   render() {
-    const{emps,mans,EmpID,EmpName,EmpDep,EmpMail,EmpDOJ} = this.state;
+    const{emps,mans,EmpID,EmpName,EmpDep,EmpMail,EmpDOJ,EmpMan} = this.state;
     return (
       <Container>
         <Table className='mt-4' striped bordered hover size='sm'>
@@ -104,7 +104,8 @@ export class Employee extends Component {
                                             EmpName:emp.EmployeeName,
                                             EmpDep:emp.Department,
                                             EmpMail:emp.MailID,
-                                            EmpDOJ:emp.DOJ
+                                            EmpDOJ:emp.DOJ,
+                                            EmpMan:emp.ManagerID
                                         })}} >
                                         Edit
                                         <ModeEditOutlineOutlinedIcon className='ms-2'/>
@@ -116,11 +117,12 @@ export class Employee extends Component {
                                     <EditEmpModal
                                     show={this.state.editModalShow}
                                     onHide={() => this.setState({editModalShow:false})}
-                                    EmpID={EmpID}
-                                    EmpName={EmpName}
-                                    EmpDep={EmpDep}
-                                    EmpMail={EmpMail}
-                                    EmpDOJ={EmpDOJ}
+                                    empid={EmpID}
+                                    empname={EmpName}
+                                    empdep={EmpDep}
+                                    empmail={EmpMail}
+                                    empdoj={EmpDOJ}
+                                    empman={EmpMan}
                                     />
                                 </ButtonToolbar>
                             </td>

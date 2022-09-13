@@ -6,6 +6,8 @@ export class EditEmpModal extends Component {
   constructor(props){
     super(props);
     this.state=({
+      deps:[],
+      mans:[],
       snackbaropen:false,
       snackbarmsg:''
     })
@@ -18,6 +20,31 @@ export class EditEmpModal extends Component {
       snackbaropen:false
     });
   }
+
+  componentDidMount() { 
+    fetch('http://localhost:54682/api/department')
+    .then((response) => {
+    return response.json();
+    })
+    .then((data) => {
+        this.setState(
+            {
+                deps:data
+            }
+        )
+    });
+    fetch('http://localhost:54682/api/manager')
+    .then((response) => {
+    return response.json();
+    })
+    .then((data) => {
+        this.setState(
+            {
+                mans:data
+            }
+        )
+    });
+   }
 
   handleSubmit(e){
     e.preventDefault();
@@ -32,7 +59,8 @@ export class EditEmpModal extends Component {
         EmployeeName:e.target.EmployeeName.value,
         Department:e.target.Department.value,
         MailID:e.target.MailID.value,
-        DOJ:e.target.DOJ.value
+        DOJ:e.target.DOJ.value,
+        ManagerID:e.target.Manager.value
       })
     })
     .then(res => res.json())
@@ -90,7 +118,7 @@ export class EditEmpModal extends Component {
                     name="EmployeeID" 
                     required 
                     disabled
-                    defaultValue={this.props.EmpID}
+                    defaultValue={this.props.empid}
                     placeholder='Employee ID' 
                     />
                   </Form.Group>
@@ -102,21 +130,19 @@ export class EditEmpModal extends Component {
                     type="text" 
                     name="EmployeeName" 
                     required 
-                    defaultValue={this.props.EmpName}
+                    defaultValue={this.props.empname}
                     placeholder='Employee Name' 
                     />
                   </Form.Group>
-                  <Form.Group>
+                  <Form.Group className='mb-2'>
                     <Form.Label>
                       Department
                     </Form.Label>
-                    <Form.Control 
-                    type="text" 
-                    name="Department" 
-                    required 
-                    defaultValue={this.props.EmpDep}
-                    placeholder='Department' 
-                    />
+                    <FormControl as="select" className='form-select' name="Department"  defaultValue={this.props.empdep}>
+                      {this.state.deps.map(dep => 
+                        <option key={dep.DepartmentID} value={dep.DepartmentName} >{dep.DepartmentName}</option>  
+                      )}
+                    </FormControl>
                   </Form.Group>
                   <Form.Group>
                     <Form.Label>
@@ -126,10 +152,23 @@ export class EditEmpModal extends Component {
                     type="text" 
                     name="MailID" 
                     required 
-                    defaultValue={this.props.EmpMail}
+                    defaultValue={this.props.empmail}
                     placeholder='Mail' 
                     />
                   </Form.Group>
+                  <Form.Group className='mb-2'>
+                    <Form.Label>
+                      Manager
+                    </Form.Label>
+                    <FormControl as="select" className='form-select' name="Manager" defaultValue={this.props.empman} >
+                    <option key={0} value={0} >No Manager</option>
+                      {this.state.mans.map(man => 
+                        <option key={man.ID} value={man.ID} >{man.ManagerName}</option>  
+                      )}
+                    </FormControl>
+                  </Form.Group>
+                  
+                  {console.log(this.props.empman)}
                   <Form.Group>
                     <Form.Label>
                       Join Date
@@ -138,7 +177,7 @@ export class EditEmpModal extends Component {
                     type="date" 
                     name="DOJ" 
                     required 
-                    defaultValue={this.props.EmpDOJ}
+                    defaultValue={this.props.empdoj}
                     />
                   </Form.Group>
                   <Form.Group>

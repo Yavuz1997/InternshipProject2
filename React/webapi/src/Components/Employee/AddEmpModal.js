@@ -7,6 +7,7 @@ export class AddEmpModal extends Component {
     super(props);
     this.state=({
       deps:[],
+      mans:[],
       snackbaropen:false,
       snackbarmsg:''
     })
@@ -32,6 +33,17 @@ export class AddEmpModal extends Component {
             }
         )
     });
+    fetch('http://localhost:54682/api/manager')
+    .then((response) => {
+    return response.json();
+    })
+    .then((data) => {
+        this.setState(
+            {
+                mans:data
+            }
+        )
+    });
    }
 
   handleSubmit(e){
@@ -47,7 +59,8 @@ export class AddEmpModal extends Component {
         EmployeeName:e.target.EmployeeName.value,
         Department:e.target.Department.value,
         MailID:e.target.MailID.value,
-        DOJ:e.target.DOJ.value
+        DOJ:e.target.DOJ.value,
+        ManagerID:e.target.Manager.value
 
       })
     })
@@ -118,6 +131,17 @@ export class AddEmpModal extends Component {
                       Mail
                     </Form.Label>
                     <FormControl type="text" name="MailID" required placeholder='Mail' />
+                  </Form.Group>
+                  <Form.Group className='mb-2'>
+                    <Form.Label>
+                      Manager
+                    </Form.Label>
+                    <FormControl as="select" className='form-select' name="Manager">
+                    <option key={0} value={0} >No Manager</option>
+                      {this.state.mans.map(man => 
+                        <option key={man.ID} value={man.ID} >{man.ManagerName}</option>  
+                      )}
+                    </FormControl>
                   </Form.Group>
                   <Form.Group className='mb-2'>
                     <Form.Label>
