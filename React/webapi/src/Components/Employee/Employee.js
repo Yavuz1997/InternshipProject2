@@ -5,6 +5,7 @@ import { EditEmpModal } from './EditEmpModal';
 import {Button, ButtonToolbar, Container} from 'react-bootstrap';
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
+import {Form, FormControl} from 'react-bootstrap';
 
 export class Employee extends Component {
   constructor(props){
@@ -13,10 +14,14 @@ export class Employee extends Component {
         emps:[],
         mans:[],
         subs:[],
+        deps:[],
+        filteredSubs:[],
         addModalShow:false,
-        editModalShow:false
+        editModalShow:false,
+        depSelect:false
     }
-
+    this.handleSubmit=this.handleSubmit.bind(this);
+    this.hasDepartment=this.hasDepartment.bind(this);
 }
   componentDidMount() { 
     this.refreshlist();
@@ -58,6 +63,17 @@ export class Employee extends Component {
             }
         )
     });
+    fetch('http://localhost:54682/api/department')
+    .then((response) => {
+    return response.json();
+    })
+    .then((data) => {
+        this.setState(
+            {
+                deps:data
+            }
+        )
+    });
   }
 
   deleteEmp(EmpID){
@@ -91,11 +107,46 @@ export class Employee extends Component {
     return "/"+subdep.SubName;
   }
 
+  handleSubmit(e){
+    e.preventDefault();
+    fetch('http://localhost:54682/api/employee', {
+      method:'POST',
+      headers:{
+        'Accept':'application/json',
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify({
+        EmployeeID:null,
+        EmployeeName:e.target.EmployeeName.value,
+        Department:e.target.Department.value,
+        MailID:e.target.MailID.value,
+        SubID:e.target.Subdepartment.value,
+        DOJ:e.target.DOJ.value,
+        ManagerID:e.target.Manager.value
+
+      })
+    })
+  }
+
+  hasDepartment(e){
+    if(e.target.value !== "0"){
+      this.setState({depSelect:true});
+    }
+      
+    if(e.target.value === "0"){
+      this.setState({depSelect:false});
+    }
+    var depID = this.state.deps.find(dep => dep.DepartmentName === e.target.value).DepartmentID;
+    this.setState({filteredSubs:this.state.subs.filter(sub => sub.DepartmentID === depID)})
+    console.log(this.state.filteredSubs)
+    
+  }
+  
   render() {
     const{emps,subs,mans,EmpID,EmpName,EmpDep,EmpMail,EmpDOJ,EmpMan} = this.state;
     return (
-      <Container>
-        <Table className='mt-4' striped bordered hover size='sm'>
+      <Container class="container-fluid">
+        <Table className='mt-4' striped bordered hover size='   '>
             <thead>
                 <tr>
                     <th>ID</th>
@@ -152,23 +203,64 @@ export class Employee extends Component {
                     )
                 }
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td className='align-middle' >
+                        +
+                    </td>
+                    <td className='align-middle' >
+                        <Form id="addEmp" onSubmit={this.handleSubmit}></Form>
+                        <Form.Group >
+                            <FormControl type="text" name="EmployeeName" required placeholder='Employee Name' form="addEmp"/>
+                        </Form.Group>
+                    </td>
+                    <td className='align-middle d-flex justify-content-around' style={{"width" : "290px"}} >
+                        <Form.Group className='me-1'>
+                            <FormControl as="select" className='form-select' name="Department" defaultValue={"0"} form="addEmp"  onChange={this.hasDepartment}>
+                            <option key={0} value={"0"} >No Department</option>  
+                            {this.state.deps.map(dep => 
+                                <option key={dep.DepartmentID} value={dep.DepartmentName} >{dep.DepartmentName}</option>  
+                            )}
+                            </FormControl>
+                        </Form.Group>
+                        <Form.Group  hidden={this.state.depSelect === false}>
+                            <FormControl as="select" className='form-select' name="Subdepartment" defaultValue={0} form="addEmp">
+                            <option key={0} value={0} >No Sub-department</option>  
+                            {this.state.filteredSubs.map(sub => 
+                                <option key={sub.ID} value={sub.ID} >{sub.SubName}</option>  
+                            )}
+                            </FormControl>
+                        </Form.Group>
+                    </td>
+                    <td className='align-middle' >
+                        <Form.Group >
+                            <FormControl type="text" name="MailID" required placeholder='Mail' form="addEmp" />
+                        </Form.Group>          
+                    </td>
+                    <td className='align-middle' >
+                        <Form.Group >
+                            <FormControl as="select" className='form-select' name="Manager" form="addEmp">
+                            <option key={0} value={0} >No Manager</option>
+                            {this.state.mans.map(man => 
+                                <option key={man.ID} value={man.ID} >{man.ManagerName}</option>  
+                            )}
+                            </FormControl>
+                        </Form.Group>          
+                    </td>
+                    <td className='align-middle' >
+                        <Form.Group >
+                            <FormControl type="date" name="DOJ" required form="addEmp"/>
+                        </Form.Group>
+                    </td>
+                    <td className='align-middle' >
+                        <Form.Group>
+                            <Button variant="primary" type="submit" form="addEmp" >
+                            Add
+                            </Button>
+                        </Form.Group>
+                    </td>
                 </tr>
             </tbody>
 
         </Table>
-        <ButtonToolbar>
-            <Button onClick={() => this.setState({addModalShow:true})} >
-                Add Employee
-            </Button>
-        </ButtonToolbar>
-        <AddEmpModal show={this.state.addModalShow} onHide={() => this.setState({addModalShow:false})} />
       </Container>
     )
   }
