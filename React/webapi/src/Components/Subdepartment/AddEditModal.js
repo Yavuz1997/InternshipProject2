@@ -38,29 +38,33 @@ export class AddEditModal extends Component {
               <Modal.Body>
                 <Row>
                   <Col sm="6">
-                    <Form onSubmit={this.handleSubmitAdd} >
+                    <Form onSubmit={this.handleSubmitAdd}>
+
                       <Form.Group>
                         <Form.Label>
                           Subdepartment Name
                         </Form.Label>
                         <FormControl type="text" name="SubdepartmentName" required placeholder='Subdepartment Name' />
                       </Form.Group>
-                      <Form.Group className='mb-2'>
+
+                      <Form.Group className='mb-2'  >
                         <Form.Label>
                           Department
                         </Form.Label>
                         <FormControl as="select" className='form-select' name="Department">
                         <option key={0} value={0} >No Department</option>
                           {this.props.deps.map(dep => 
-                            <option key={dep.DepartmentID} value={dep.DepartmentID} >{dep.DepartmentName}</option>  
+                            <option key={dep.DepartmentID} value={dep.DepartmentID}>{dep.DepartmentName}</option>  
                           )}
                         </FormControl>
                       </Form.Group>
+                      
                       <Form.Group>
                         <Button variant="primary" type="submit" className='mt-3' >
                           Add
                         </Button>
                       </Form.Group>
+
                     </Form>
                   </Col>
                 </Row>
@@ -119,7 +123,7 @@ export class AddEditModal extends Component {
                             <FormControl as="select" className='form-select' name="Department" defaultValue={this.props.depid} >
                             <option key={0} value={0}  >No Department</option>
                               {this.props.deps.map(dep => 
-                                <option key={dep.DepartmentID} value={dep.DepartmentID} >{dep.DepartmentName}</option>  
+                                <option key={dep.DepartmentID} value={dep.DepartmentID}>{dep.DepartmentName}</option>  
                               )}
                             </FormControl>
                           </Form.Group>

@@ -8,10 +8,13 @@ export class EditEmpModal extends Component {
     this.state=({
       deps:[],
       mans:[],
+      subs:[],
+      filteredSubs:[],
       snackbaropen:false,
       snackbarmsg:''
-    })
+    });
     this.handleSubmit=this.handleSubmit.bind(this);
+    this.hasDepartment=this.hasDepartment.bind(this);
   }
 
   snackbarClose = () => 
@@ -44,6 +47,17 @@ export class EditEmpModal extends Component {
             }
         )
     });
+    fetch('http://localhost:54682/api/subdepartment')
+    .then((response) => {
+    return response.json();
+    })
+    .then((data) => {
+        this.setState(
+            {
+                subs:data
+            }
+        )
+    });
    }
 
   handleSubmit(e){
@@ -59,6 +73,7 @@ export class EditEmpModal extends Component {
         EmployeeName:e.target.EmployeeName.value,
         Department:e.target.Department.value,
         MailID:e.target.MailID.value,
+        SubID:e.target.Subdepartment.value,
         DOJ:e.target.DOJ.value,
         ManagerID:e.target.Manager.value
       })
@@ -79,6 +94,17 @@ export class EditEmpModal extends Component {
         });
       }
       );
+  }
+  hasDepartment(e){
+    if(e.target.value !== "0"){
+      this.setState({depSelect:true});
+    }
+      
+    if(e.target.value === "0"){
+      this.setState({depSelect:false});
+    }
+    var depID = this.state.deps.find(dep => dep.DepartmentName === e.target.value).DepartmentID;
+    this.setState({filteredSubs:this.state.subs.filter(sub => sub.DepartmentID === depID)})
     
   }
   render() {
@@ -109,6 +135,7 @@ export class EditEmpModal extends Component {
             <Row>
               <Col sm="6">
                 <Form onSubmit={this.handleSubmit} >
+
                   <Form.Group>
                     <Form.Label>
                       Employee ID
@@ -122,6 +149,7 @@ export class EditEmpModal extends Component {
                     placeholder='Employee ID' 
                     />
                   </Form.Group>
+
                   <Form.Group>
                     <Form.Label>
                       Employee Name
@@ -134,16 +162,31 @@ export class EditEmpModal extends Component {
                     placeholder='Employee Name' 
                     />
                   </Form.Group>
+
                   <Form.Group className='mb-2'>
                     <Form.Label>
                       Department
                     </Form.Label>
-                    <FormControl as="select" className='form-select' name="Department"  defaultValue={this.props.empdep}>
+                    <FormControl as="select" className='form-select' name="Department"  defaultValue={this.props.empdep} onChange={this.hasDepartment}>
+                      <option key={0} value={"0"} >No Department</option>  
                       {this.state.deps.map(dep => 
                         <option key={dep.DepartmentID} value={dep.DepartmentName} >{dep.DepartmentName}</option>  
                       )}
                     </FormControl>
                   </Form.Group>
+
+                  <Form.Group className='mb-2' hidden={this.state.depSelect === false} >
+                    <Form.Label>
+                      Sub-Department
+                    </Form.Label>
+                    <FormControl as="select" className='form-select' name="Subdepartment" defaultValue={0}>
+                    <option key={0} value={0} >No Sub-department</option>  
+                      {this.state.filteredSubs.map(sub => 
+                        <option key={sub.ID} value={sub.ID} >{sub.SubName}</option>  
+                      )}
+                    </FormControl>
+                  </Form.Group>
+
                   <Form.Group>
                     <Form.Label>
                       Mail
@@ -156,6 +199,7 @@ export class EditEmpModal extends Component {
                     placeholder='Mail' 
                     />
                   </Form.Group>
+
                   <Form.Group className='mb-2'>
                     <Form.Label>
                       Manager
@@ -167,6 +211,7 @@ export class EditEmpModal extends Component {
                       )}
                     </FormControl>
                   </Form.Group>
+
                   <Form.Group>
                     <Form.Label>
                       Join Date
@@ -178,11 +223,13 @@ export class EditEmpModal extends Component {
                     defaultValue={this.props.empdoj}
                     />
                   </Form.Group>
+
                   <Form.Group>
                     <Button variant="primary" type="submit" className='mt-3' >
                       Update
                     </Button>
                   </Form.Group>
+
                 </Form>
               </Col>
             </Row>

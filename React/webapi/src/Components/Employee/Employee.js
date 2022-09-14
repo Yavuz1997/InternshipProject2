@@ -12,6 +12,7 @@ export class Employee extends Component {
     this.state={
         emps:[],
         mans:[],
+        subs:[],
         addModalShow:false,
         editModalShow:false
     }
@@ -46,6 +47,17 @@ export class Employee extends Component {
             }
         )
     });
+    fetch('http://localhost:54682/api/subdepartment')
+    .then((response) => {
+    return response.json();
+    })
+    .then((data) => {
+        this.setState(
+            {
+                subs:data
+            }
+        )
+    });
   }
 
   deleteEmp(EmpID){
@@ -61,7 +73,7 @@ export class Employee extends Component {
     }
   }
 
-  getManager(mans,ManagerID){
+  getManagerNameFromID(mans,ManagerID){
     if (ManagerID === 0){
         return "No Manager";
     }
@@ -69,8 +81,18 @@ export class Employee extends Component {
    if( manager !== undefined)
     return manager.ManagerName;
   }
+
+  getSubNameFromID(subs,SubID){
+    if (SubID === 0){
+        return "";
+    }
+   var subdep = subs.find(sub => sub.ID === SubID);
+   if( subdep !== undefined)
+    return "/"+subdep.SubName;
+  }
+
   render() {
-    const{emps,mans,EmpID,EmpName,EmpDep,EmpMail,EmpDOJ,EmpMan} = this.state;
+    const{emps,subs,mans,EmpID,EmpName,EmpDep,EmpMail,EmpDOJ,EmpMan} = this.state;
     return (
       <Container>
         <Table className='mt-4' striped bordered hover size='sm'>
@@ -91,9 +113,9 @@ export class Employee extends Component {
                         <tr key={emp.EmployeeID}>
                             <td className='align-middle' >{emp.EmployeeID}</td>
                             <td className='align-middle' >{emp.EmployeeName}</td>
-                            <td className='align-middle' >{emp.Department}</td>
+                            <td className='align-middle' >{emp.Department}{this.getSubNameFromID(subs,emp.SubID)}</td>
                             <td className='align-middle' >{emp.MailID}</td>
-                            <td className='align-middle' >{this.getManager(mans,emp.ManagerID)}</td>
+                            <td className='align-middle' >{this.getManagerNameFromID(mans,emp.ManagerID)}</td>
                             <td className='align-middle' >{emp.DOJ}</td>
                             <td className='align-middle' >
                                 <ButtonToolbar className='d-flex justify-content-around'>
@@ -129,7 +151,15 @@ export class Employee extends Component {
                         </tr>
                     )
                 }
-
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
             </tbody>
 
         </Table>

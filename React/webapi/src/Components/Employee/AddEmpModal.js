@@ -8,10 +8,15 @@ export class AddEmpModal extends Component {
     this.state=({
       deps:[],
       mans:[],
+      subs:[],
+      filteredSubs:[],
       snackbaropen:false,
-      snackbarmsg:''
+      snackbarmsg:'',
+      depSelect:false
     })
     this.handleSubmit=this.handleSubmit.bind(this);
+    this.hasDepartment=this.hasDepartment.bind(this);
+
   }
 
   snackbarClose = () => 
@@ -44,6 +49,17 @@ export class AddEmpModal extends Component {
             }
         )
     });
+    fetch('http://localhost:54682/api/subdepartment')
+    .then((response) => {
+    return response.json();
+    })
+    .then((data) => {
+        this.setState(
+            {
+                subs:data
+            }
+        )
+    });
    }
 
   handleSubmit(e){
@@ -59,6 +75,7 @@ export class AddEmpModal extends Component {
         EmployeeName:e.target.EmployeeName.value,
         Department:e.target.Department.value,
         MailID:e.target.MailID.value,
+        SubID:e.target.Subdepartment.value,
         DOJ:e.target.DOJ.value,
         ManagerID:e.target.Manager.value
 
@@ -82,6 +99,20 @@ export class AddEmpModal extends Component {
       );
     
   }
+
+  hasDepartment(e){
+    if(e.target.value !== "0"){
+      this.setState({depSelect:true});
+    }
+      
+    if(e.target.value === "0"){
+      this.setState({depSelect:false});
+    }
+    var depID = this.state.deps.find(dep => dep.DepartmentName === e.target.value).DepartmentID;
+    this.setState({filteredSubs:this.state.subs.filter(sub => sub.DepartmentID === depID)})
+    
+  }
+
   render() {
     return (
       <div className='container'>
@@ -110,28 +141,46 @@ export class AddEmpModal extends Component {
             <Row>
               <Col sm="6">
                 <Form onSubmit={this.handleSubmit} >
+
                   <Form.Group className='mb-2'>
                     <Form.Label>
                       Employee Name
                     </Form.Label>
                     <FormControl type="text" name="EmployeeName" required placeholder='Employee Name' />
                   </Form.Group>
+
                   <Form.Group className='mb-2'>
                     <Form.Label>
                       Department
                     </Form.Label>
-                    <FormControl as="select" className='form-select' name="Department">
+                    <FormControl as="select" className='form-select' name="Department" defaultValue={"0"} onChange={this.hasDepartment}>
+                    <option key={0} value={"0"} >No Department</option>  
                       {this.state.deps.map(dep => 
                         <option key={dep.DepartmentID} value={dep.DepartmentName} >{dep.DepartmentName}</option>  
                       )}
                     </FormControl>
                   </Form.Group>
+                  
+
+                  <Form.Group className='mb-2' hidden={this.state.depSelect === false} >
+                    <Form.Label>
+                      Sub-Department
+                    </Form.Label>
+                    <FormControl as="select" className='form-select' name="Subdepartment" defaultValue={0}>
+                    <option key={0} value={0} >No Sub-department</option>  
+                      {this.state.filteredSubs.map(sub => 
+                        <option key={sub.ID} value={sub.ID} >{sub.SubName}</option>  
+                      )}
+                    </FormControl>
+                  </Form.Group>
+
                   <Form.Group className='mb-2'>
                     <Form.Label>
                       Mail
                     </Form.Label>
                     <FormControl type="text" name="MailID" required placeholder='Mail' />
                   </Form.Group>
+
                   <Form.Group className='mb-2'>
                     <Form.Label>
                       Manager
@@ -143,17 +192,20 @@ export class AddEmpModal extends Component {
                       )}
                     </FormControl>
                   </Form.Group>
+
                   <Form.Group className='mb-2'>
                     <Form.Label>
                       Join Date
                     </Form.Label>
                     <FormControl type="date" name="DOJ" required/>
                   </Form.Group>
+
                   <Form.Group>
                     <Button variant="primary" type="submit" className='mt-3' >
                       Add
                     </Button>
                   </Form.Group>
+
                 </Form>
               </Col>
             </Row>
